@@ -23,7 +23,7 @@ class CreatedFilter implements ContainerResponseFilter {
     }
 
     private String createLocationUrl(ContainerResponseContext responseContext) {
-        def key = responseContext.entity.key
+        def key = responseContext.entity.id
         return "${key.kind}/${key.id}"
     }
 }
