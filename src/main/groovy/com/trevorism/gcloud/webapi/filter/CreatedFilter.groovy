@@ -22,7 +22,6 @@ class CreatedFilter implements ContainerResponseFilter {
         responseContext.getHeaders().add("location", url)
     }
 
-
     private String createLocationUrl(ContainerResponseContext responseContext) {
         def key = responseContext.entity.key
         return "${key.kind}/${key.id}"

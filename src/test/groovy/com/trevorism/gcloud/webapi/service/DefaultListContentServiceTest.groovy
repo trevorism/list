@@ -6,6 +6,7 @@ import com.trevorism.gcloud.webapi.model.TrevorismList
 import org.junit.Test
 
 class DefaultListContentServiceTest {
+
     @Test
     void testCreate() {
         DefaultListContentService defaultListContentService = new DefaultListContentService()
@@ -55,7 +56,6 @@ class DefaultListContentServiceTest {
         assert defaultListContentService.addListContent(5202267682635776, "self1")
         assert defaultListContentService.addListContent(5202267682635776, "self1").data.contains("self1")
         assert !defaultListContentService.addListContent(5716218166116352, "ids don't match")
-
     }
 
     @Test
@@ -65,7 +65,6 @@ class DefaultListContentServiceTest {
         assert defaultListContentService.replaceListContent(5202267682635776, ["self1"])
         assert defaultListContentService.replaceListContent(5202267682635776, ["self1"]).data.contains("self1")
         assert !defaultListContentService.replaceListContent(5716218166116352, ["nonself1"])
-
     }
 
     @Test
