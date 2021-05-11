@@ -1,7 +1,5 @@
 package com.trevorism.gcloud.webapi.controller
 
-import com.trevorism.data.PingingDatastoreRepository
-import com.trevorism.data.Repository
 import com.trevorism.gcloud.webapi.filter.Created
 import com.trevorism.gcloud.webapi.model.Content
 import com.trevorism.gcloud.webapi.model.TrevorismList
@@ -30,7 +28,7 @@ class TrevorismListController {
     private static final Logger log = Logger.getLogger(TrevorismListController.class.name)
     private ListContentService service = new DefaultListContentService()
 
-    @ApiOperation(value = "Get a list with id {id}")
+    @ApiOperation(value = "Get a list with id {id} **Secure")
     @GET
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}")
@@ -41,7 +39,6 @@ class TrevorismListController {
 
     @ApiOperation(value = "Get all lists")
     @GET
-    @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Produces(MediaType.APPLICATION_JSON)
     List<TrevorismList> readAll(){
         service.readAll()
@@ -81,7 +78,7 @@ class TrevorismListController {
         service.delete(id)
     }
 
-    @ApiOperation(value = "Get the list contents with id {id}")
+    @ApiOperation(value = "Get the list contents with id {id} **Secure")
     @GET
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}/content")
@@ -90,7 +87,7 @@ class TrevorismListController {
         service.getContent(id)
     }
 
-    @ApiOperation(value = "Get the list contents with id {id}")
+    @ApiOperation(value = "Get the list contents with id {id} **Secure")
     @POST
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}/content")
@@ -99,7 +96,7 @@ class TrevorismListController {
         service.addListContent(id, item)
     }
 
-    @ApiOperation(value = "Replace the list contents with id {id}")
+    @ApiOperation(value = "Replace the list contents with id {id} **Secure")
     @PUT
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}/content")
@@ -108,7 +105,7 @@ class TrevorismListController {
         service.replaceListContent(id, items)
     }
 
-    @ApiOperation(value = "Delete an item from the list contents with id {id}")
+    @ApiOperation(value = "Delete an item from the list contents with id {id} **Secure")
     @DELETE
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}/content")

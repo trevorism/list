@@ -13,7 +13,6 @@ import javax.ws.rs.ext.Provider
 @Created
 class CreatedFilter implements ContainerResponseFilter {
 
-
     @Override
     void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
         if(!responseContext.entity)
