@@ -108,9 +108,9 @@ class TrevorismListController {
     @ApiOperation(value = "Delete an item from the list contents with id {id} **Secure")
     @DELETE
     @Secure(value = Roles.SYSTEM, allowInternal = true)
-    @Path("{id}/content")
+    @Path("{id}/content/{content}")
     @Produces(MediaType.APPLICATION_JSON)
-    Content deleteContent(@PathParam("id") long id, String item){
+    Content deleteContent(@PathParam("id") long id, @PathParam("content") String item){
         service.removeListContent(id, item)
     }
 }
