@@ -3,7 +3,10 @@ package com.trevorism.gcloud.webapi.controller
 import com.trevorism.data.PingingDatastoreRepository
 import com.trevorism.data.Repository
 import com.trevorism.gcloud.webapi.filter.Created
+import com.trevorism.gcloud.webapi.model.Content
 import com.trevorism.gcloud.webapi.model.TrevorismList
+import com.trevorism.gcloud.webapi.service.DefaultListContentService
+import com.trevorism.gcloud.webapi.service.ListContentService
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
 import io.swagger.annotations.Api
@@ -22,59 +25,95 @@ import javax.ws.rs.core.MediaType
 import java.util.logging.Logger
 
 @Api("List Operations")
-@Path("list")
+@Path("api")
 class TrevorismListController {
     private static final Logger log = Logger.getLogger(TrevorismListController.class.name)
-    private Repository<TrevorismList> trevorismListRepository = new PingingDatastoreRepository<>(TrevorismList)
+    private ListContentService service = new DefaultListContentService()
 
-    @ApiOperation(value = "Get a filter with id {id}")
+    @ApiOperation(value = "Get a list with id {id}")
     @GET
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     TrevorismList read(@PathParam("id") long id){
-        trevorismListRepository.get(String.valueOf(id))
+        service.read(id)
     }
 
-    @ApiOperation(value = "Get all filters")
+    @ApiOperation(value = "Get all lists")
     @GET
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Produces(MediaType.APPLICATION_JSON)
     List<TrevorismList> readAll(){
-        trevorismListRepository.list()
+        service.readAll()
     }
 
-    @ApiOperation(value = "Create a filter **Secure")
+    @ApiOperation(value = "Create a list **Secure")
     @POST
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Created
-    TrevorismList create(TrevorismList filter){
+    TrevorismList create(TrevorismList trevorismList){
         try {
-            trevorismListRepository.create(filter)
+            service.create(trevorismList)
         }catch (Exception e){
-            log.severe("Unable to create Filter object: ${filter} :: ${e.getMessage()}")
+            log.severe("Unable to create List object: ${trevorismList} :: ${e.getMessage()}")
             throw new BadRequestException(e)
         }
     }
 
-    @ApiOperation(value = "Update a filter with id {id} **Secure")
+    @ApiOperation(value = "Update a list with id {id} **Secure")
     @PUT
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    TrevorismList update(@PathParam("id") long id, TrevorismList filter){
-        trevorismListRepository.update(String.valueOf(id), filter)
+    TrevorismList update(@PathParam("id") long id, TrevorismList trevorismList){
+        service.update(id, trevorismList)
     }
 
-    @ApiOperation(value = "Delete a filter with id {id} **Secure")
+    @ApiOperation(value = "Delete a list with id {id} **Secure")
     @DELETE
     @Secure(value = Roles.SYSTEM, allowInternal = true)
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     TrevorismList delete(@PathParam("id") long id){
-        trevorismListRepository.delete(String.valueOf(id))
+        service.delete(id)
+    }
+
+    @ApiOperation(value = "Get the list contents with id {id}")
+    @GET
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
+    @Path("{id}/content")
+    @Produces(MediaType.APPLICATION_JSON)
+    Content getContents(@PathParam("id") long id){
+        service.getContent(id)
+    }
+
+    @ApiOperation(value = "Get the list contents with id {id}")
+    @POST
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
+    @Path("{id}/content")
+    @Produces(MediaType.APPLICATION_JSON)
+    Content addContent(@PathParam("id") long id, String item){
+        service.addListContent(id, item)
+    }
+
+    @ApiOperation(value = "Replace the list contents with id {id}")
+    @PUT
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
+    @Path("{id}/content")
+    @Produces(MediaType.APPLICATION_JSON)
+    Content replaceContent(@PathParam("id") long id, List<String> items){
+        service.replaceListContent(id, items)
+    }
+
+    @ApiOperation(value = "Delete an item from the list contents with id {id}")
+    @DELETE
+    @Secure(value = Roles.SYSTEM, allowInternal = true)
+    @Path("{id}/content")
+    @Produces(MediaType.APPLICATION_JSON)
+    Content deleteContent(@PathParam("id") long id, String item){
+        service.removeListContent(id, item)
     }
 }
