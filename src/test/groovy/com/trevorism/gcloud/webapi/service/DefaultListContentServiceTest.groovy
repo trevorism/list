@@ -83,11 +83,5 @@ class DefaultListContentServiceTest {
         assert defaultListContentService.getContent(5202267682635776)
         assert !defaultListContentService.getContent(5716218166116352)
     }
-
-    @Test
-    void testGetNonHostedContent() {
-        DefaultListContentService defaultListContentService = new DefaultListContentService()
-        def content = defaultListContentService.getNonSelfHostedData(5202638928871424)
-        println content
-    }
+    
 }
