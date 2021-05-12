@@ -87,13 +87,13 @@ class DefaultListContentService implements ListContentService {
     @Override
     Content getNonSelfHostedData(long id) {
         TrevorismList trevorismList = read(id)
-        if(trevorismList.selfHosted){
+        if (trevorismList.selfHosted) {
             return null
         }
-        try{
+        try {
             String json = httpClient.get(trevorismList.url)
-            return new Content(trevorismListId: id, data: gson.fromJson(json, List))
-        }catch(Exception e){
+            return new Content(trevorismListId: id, data: gson.fromJson(json, List).collect { it.toString() })
+        } catch (Exception e) {
             log.warning("Unable to retrieve content from url: ${trevorismList.url} with error message: ${e.getMessage()}")
         }
         return null
