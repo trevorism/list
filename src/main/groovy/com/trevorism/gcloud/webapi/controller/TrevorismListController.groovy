@@ -84,7 +84,11 @@ class TrevorismListController {
     @Path("{id}/content")
     @Produces(MediaType.APPLICATION_JSON)
     Content getContents(@PathParam("id") long id){
-        service.getContent(id)
+        def content = service.getContent(id)
+        if(!content){
+            content = service.getNonSelfHostedData(id)
+        }
+        return content
     }
 
     @ApiOperation(value = "Get the list contents with id {id} **Secure")

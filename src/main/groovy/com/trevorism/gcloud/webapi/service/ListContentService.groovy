@@ -22,4 +22,6 @@ interface ListContentService {
     Content removeListContent(long id, String item)
 
     Content getContent(long id)
+
+    Content getNonSelfHostedData(long id)
 }
