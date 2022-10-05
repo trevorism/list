@@ -26,4 +26,5 @@ jobs:
 
   call-accept-after:
     uses: trevorism/actions-workflows/.github/workflows/accept.yml@master
+    if: always()
     needs: call-deploy
