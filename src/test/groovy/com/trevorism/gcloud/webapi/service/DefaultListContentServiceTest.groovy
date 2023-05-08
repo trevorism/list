@@ -3,7 +3,7 @@ package com.trevorism.gcloud.webapi.service
 import com.trevorism.data.Repository
 import com.trevorism.gcloud.webapi.model.Content
 import com.trevorism.gcloud.webapi.model.TrevorismList
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class DefaultListContentServiceTest {
 
