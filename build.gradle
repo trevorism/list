@@ -55,7 +55,6 @@ dependencies {
     }
 
     implementation 'com.google.code.gson:gson:2.10.1'
-
     implementation 'com.trevorism:micronaut-utility-beans:0.1.0'
     implementation 'com.trevorism:datastore-client:3.1.0'
 
@@ -90,6 +89,6 @@ appengine {
         projectId = "trevorism-data"
         stopPreviousVersion = true
         promote = true
-        version = "0-2-0"
+        version = "0-3-0"
     }
 }
