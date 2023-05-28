@@ -4,6 +4,8 @@ import com.google.gson.Gson
 import com.trevorism.data.FastDatastoreRepository
 import com.trevorism.data.PingingDatastoreRepository
 import com.trevorism.data.Repository
+import com.trevorism.data.model.filtering.FilterBuilder
+import com.trevorism.data.model.filtering.SimpleFilter
 import com.trevorism.gcloud.webapi.model.Content
 import com.trevorism.gcloud.webapi.model.TrevorismList
 import com.trevorism.https.SecureHttpClient
@@ -24,7 +26,7 @@ class DefaultListContentService implements ListContentService {
     DefaultListContentService(SecureHttpClient secureHttpClient) {
         this.httpClient = secureHttpClient
         trevorismListRepository = new FastDatastoreRepository<>(TrevorismList, secureHttpClient)
-        listContentRepository = new PingingDatastoreRepository<>(Content, secureHttpClient)
+        listContentRepository = new FastDatastoreRepository<>(Content, secureHttpClient)
     }
 
     @Override
@@ -87,11 +89,10 @@ class DefaultListContentService implements ListContentService {
 
     @Override
     Content getContent(long id) {
-        def allContents = listContentRepository.list()
-        Content content = allContents.find {
-            it.trevorismListId == String.valueOf(id)
-        }
-        return content
+        def allContents = listContentRepository.filter(new FilterBuilder().addFilter(new SimpleFilter("trevorismListId","=","${id}")))
+        if(allContents)
+            return allContents[0]
+        return null
     }
 
     @Override
