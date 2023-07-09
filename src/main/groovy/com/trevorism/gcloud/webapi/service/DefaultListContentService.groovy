@@ -54,6 +54,9 @@ class DefaultListContentService implements ListContentService {
 
     @Override
     TrevorismList delete(long id) {
+        Content content = getContent(id)
+        if(content)
+            listContentRepository.delete(content.id)
         trevorismListRepository.delete(String.valueOf(id))
     }
 
