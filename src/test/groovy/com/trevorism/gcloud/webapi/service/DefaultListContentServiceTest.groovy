@@ -46,6 +46,7 @@ class DefaultListContentServiceTest {
     @Test
     void testDelete() {
         DefaultListContentService defaultListContentService = new DefaultListContentService(new EchoSecureHttpClient())
+        defaultListContentService.listContentRepository = [delete: {}, filter:  {[new Content(trevorismListId: 5202267682635776, data: [])]}] as Repository
         defaultListContentService.trevorismListRepository = [delete: { new TrevorismList(selfHosted: true)}] as Repository
         assert defaultListContentService.delete(5202267682635776)
     }
