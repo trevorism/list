@@ -6,7 +6,7 @@
 
 Webapp for managing and invoking lists on the trevorism platform
 
-Current version: 0.3.0
+Current version: 0.4.0
 
 Deployed to https://list.data.trevorism.com
 
