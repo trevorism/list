@@ -10,7 +10,5 @@ Current version: 0.5.0
 
 Deployed to https://list.data.trevorism.com
 
-## Goals
-The goals of the list platform are
-
-* Location and organization of items in Trevorism.
+### How to build
+`gradle clean build`
