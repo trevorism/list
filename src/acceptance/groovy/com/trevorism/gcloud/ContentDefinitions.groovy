@@ -15,6 +15,7 @@ import io.cucumber.groovy.Hooks
 this.metaClass.mixin(Hooks)
 this.metaClass.mixin(EN)
 
+String baseUrl = System.getenv("ACCEPTANCE_BASE_URL") ?: "https://list.data.trevorism.com"
 SecureHttpClient secureHttpClient = new AppClientSecureHttpClient()
 TrevorismList created
 Gson gson = new Gson()
@@ -23,17 +24,17 @@ Content updatedContent
 
 Given(/a new list container is created/) {  ->
     String json = gson.toJson(new TrevorismList(name: "testList", description: "testDescription", selfHosted: true))
-    String responseJson = secureHttpClient.post("https://list.data.trevorism.com/api", json)
+    String responseJson = secureHttpClient.post("${baseUrl}/api", json)
     created = gson.fromJson(responseJson, TrevorismList.class)
 }
 
 Given(/contains content with the value {string}/) { String string ->
-    secureHttpClient.post("https://list.data.trevorism.com/api/${created.id}/content", string)
+    secureHttpClient.post("${baseUrl}/api/${created.id}/content", string)
 }
 
 When(/the container content is requested/) {  ->
-    assert secureHttpClient.get("https://list.data.trevorism.com/api/${created.id}")
-    String responseJson = secureHttpClient.get("https://list.data.trevorism.com/api/${created.id}/content")
+    assert secureHttpClient.get("${baseUrl}/api/${created.id}")
+    String responseJson = secureHttpClient.get("${baseUrl}/api/${created.id}/content")
     responseContent = gson.fromJson(responseJson, Content.class)
 }
 
@@ -42,12 +43,12 @@ Then(/the content includes {string}/) { String string ->
 }
 
 Then(/the list container is deleted successfully/) {  ->
-    assert secureHttpClient.delete("https://list.data.trevorism.com/api/${created.id}")
+    assert secureHttpClient.delete("${baseUrl}/api/${created.id}")
 }
 
 When(/the container content is updated with {string}/) { String string ->
     String json = gson.toJson(["test", string])
-    String responseJson = secureHttpClient.put("https://list.data.trevorism.com/api/${created.id}/content", json)
+    String responseJson = secureHttpClient.put("${baseUrl}/api/${created.id}/content", json)
     assert responseJson.contains(string)
     updatedContent = gson.fromJson(responseJson, Content.class)
 }
