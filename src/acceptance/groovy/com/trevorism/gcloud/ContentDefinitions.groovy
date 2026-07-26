@@ -21,6 +21,7 @@ TrevorismList created
 Gson gson = new Gson()
 Content responseContent
 Content updatedContent
+String randomItem
 
 Given(/a new list container is created/) {  ->
     String json = gson.toJson(new TrevorismList(name: "testList", description: "testDescription", selfHosted: true))
@@ -36,6 +37,14 @@ When(/the container content is requested/) {  ->
     assert secureHttpClient.get("${baseUrl}/api/${created.id}")
     String responseJson = secureHttpClient.get("${baseUrl}/api/${created.id}/content")
     responseContent = gson.fromJson(responseJson, Content.class)
+}
+
+When(/a random item from the container is requested/) {  ->
+    randomItem = secureHttpClient.get("${baseUrl}/api/${created.id}/random")
+}
+
+Then(/the random item is {string}/) { String string ->
+    assert randomItem.trim() == string
 }
 
 Then(/the content includes {string}/) { String string ->

@@ -13,6 +13,8 @@ import jakarta.inject.Inject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+import java.util.concurrent.ThreadLocalRandom
+
 @Controller("/api")
 class TrevorismListController {
     private static final Logger log = LoggerFactory.getLogger(TrevorismListController.class.name)
@@ -75,6 +77,18 @@ class TrevorismListController {
             content = service.getNonSelfHostedData(id)
         }
         return content
+    }
+
+    @Tag(name = "List Operations")
+    @Operation(summary = "Get a single random item from the list with id {id} **Secure")
+    @Get(value = "/{id}/random", produces = MediaType.TEXT_PLAIN)
+    @Secure(value = Roles.USER, allowInternal = true)
+    String getRandomContent(long id){
+        Content content = getContents(id)
+        if(content?.data){
+            return content.data[ThreadLocalRandom.current().nextInt(0, content.data.size())]
+        }
+        return null
     }
 
     @Tag(name = "List Operations")
