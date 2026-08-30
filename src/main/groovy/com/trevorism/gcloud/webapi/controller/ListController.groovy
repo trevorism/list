@@ -3,8 +3,10 @@ package com.trevorism.gcloud.webapi.controller
 import com.trevorism.gcloud.webapi.model.Content
 import com.trevorism.gcloud.webapi.model.TrevorismList
 import com.trevorism.gcloud.webapi.service.ListContentService
+import com.trevorism.secure.Permissions
 import com.trevorism.secure.Roles
 import com.trevorism.secure.Secure
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import io.swagger.v3.oas.annotations.Operation
@@ -15,9 +17,9 @@ import org.slf4j.LoggerFactory
 
 import java.util.concurrent.ThreadLocalRandom
 
-@Controller("/api")
-class TrevorismListController {
-    private static final Logger log = LoggerFactory.getLogger(TrevorismListController.class.name)
+@Controller("/object")
+class ListController {
+    private static final Logger log = LoggerFactory.getLogger(ListController.class.name)
 
     @Inject
     ListContentService service
@@ -25,7 +27,7 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Get a list with id {id} **Secure")
     @Get(value = "/{id}", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     TrevorismList read(long id){
         service.read(id)
     }
@@ -33,7 +35,7 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Get all lists **Secure")
     @Get(value = "/", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     List<TrevorismList> readAll(){
         service.readAll()
     }
@@ -41,7 +43,8 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Create a list **Secure")
     @Post(value = "/", produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.CREATE)
+    @Status(HttpStatus.CREATED)
     TrevorismList create(@Body TrevorismList trevorismList){
         try {
             service.create(trevorismList)
@@ -53,16 +56,13 @@ class TrevorismListController {
 
     @Tag(name = "List Operations")
     @Operation(summary = "Update a list with id {id} **Secure")
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.UPDATE)
     @Put(value = "/{id}", produces = MediaType.APPLICATION_JSON,  consumes = MediaType.APPLICATION_JSON)
     TrevorismList update(long id, @Body TrevorismList trevorismList){
         service.update(id, trevorismList)
     }
 
-    @Tag(name = "List Operations")
-    @Operation(summary = "Delete a list with id {id} **Secure")
-    @Delete(value = "{id}", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Delete(value = "/{id}", produces = MediaType.APPLICATION_JSON)
     TrevorismList delete(long id){
         service.delete(id)
     }
@@ -70,7 +70,7 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Get the list contents with id {id} **Secure")
     @Get(value = "/{id}/content", produces = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     Content getContents(long id){
         def content = service.getContent(id)
         if(!content){
@@ -82,7 +82,7 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Get a single random item from the list with id {id} **Secure")
     @Get(value = "/{id}/random", produces = MediaType.TEXT_PLAIN)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.READ)
     String getRandomContent(long id){
         Content content = getContents(id)
         if(content?.data){
@@ -94,7 +94,8 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Add content to the list with id {id} **Secure")
     @Post(value = "/{id}/content", produces = MediaType.APPLICATION_JSON,  consumes = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.CREATE)
+    @Status(HttpStatus.CREATED)
     Content addContent(long id, @Body String item){
         service.addListContent(id, item)
     }
@@ -102,7 +103,7 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Replace the list contents with id {id} **Secure")
     @Put(value = "/{id}/content", produces = MediaType.APPLICATION_JSON,  consumes = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.UPDATE)
     Content replaceContent(long id, @Body List<String> items){
         service.replaceListContent(id, items)
     }
@@ -110,7 +111,7 @@ class TrevorismListController {
     @Tag(name = "List Operations")
     @Operation(summary = "Delete an item from the list contents with id {id} **Secure")
     @Delete(value = "/{id}/content/{content}", produces = MediaType.APPLICATION_JSON,  consumes = MediaType.APPLICATION_JSON)
-    @Secure(value = Roles.USER, allowInternal = true)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.DELETE)
     Content deleteContent(long id, String content){
         service.removeListContent(id, content)
     }

@@ -15,7 +15,7 @@ class DefaultListContentServiceTest {
         defaultListContentService.listContentRepository = [create: {}] as Repository
 
         TrevorismList trevorismList = new TrevorismList(name: "firstList", description: "just a sample non-self hosted list", url: "https://datastore.data.trevorism.com/object", selfHosted: false, )
-        TrevorismList trevorismList2 = new TrevorismList(name: "secondList", description: "just a sample self hosted list", url: "https://list.data.trevorism.com/api/", selfHosted: true )
+        TrevorismList trevorismList2 = new TrevorismList(name: "secondList", description: "just a sample self hosted list", url: "https://list.data.trevorism.com/object/", selfHosted: true )
 
         assert defaultListContentService.create(trevorismList)
         assert defaultListContentService.create(trevorismList2)

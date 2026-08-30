@@ -25,22 +25,22 @@ String randomItem
 
 Given(/a new list container is created/) {  ->
     String json = gson.toJson(new TrevorismList(name: "testList", description: "testDescription", selfHosted: true))
-    String responseJson = secureHttpClient.post("${baseUrl}/api", json)
+    String responseJson = secureHttpClient.post("${baseUrl}/object", json)
     created = gson.fromJson(responseJson, TrevorismList.class)
 }
 
 Given(/contains content with the value {string}/) { String string ->
-    secureHttpClient.post("${baseUrl}/api/${created.id}/content", string)
+    secureHttpClient.post("${baseUrl}/object/${created.id}/content", string)
 }
 
 When(/the container content is requested/) {  ->
-    assert secureHttpClient.get("${baseUrl}/api/${created.id}")
-    String responseJson = secureHttpClient.get("${baseUrl}/api/${created.id}/content")
+    assert secureHttpClient.get("${baseUrl}/object/${created.id}")
+    String responseJson = secureHttpClient.get("${baseUrl}/object/${created.id}/content")
     responseContent = gson.fromJson(responseJson, Content.class)
 }
 
 When(/a random item from the container is requested/) {  ->
-    randomItem = secureHttpClient.get("${baseUrl}/api/${created.id}/random")
+    randomItem = secureHttpClient.get("${baseUrl}/object/${created.id}/random")
 }
 
 Then(/the random item is {string}/) { String string ->
@@ -52,12 +52,12 @@ Then(/the content includes {string}/) { String string ->
 }
 
 Then(/the list container is deleted successfully/) {  ->
-    assert secureHttpClient.delete("${baseUrl}/api/${created.id}")
+    assert secureHttpClient.delete("${baseUrl}/object/${created.id}")
 }
 
 When(/the container content is updated with {string}/) { String string ->
     String json = gson.toJson(["test", string])
-    String responseJson = secureHttpClient.put("${baseUrl}/api/${created.id}/content", json)
+    String responseJson = secureHttpClient.put("${baseUrl}/object/${created.id}/content", json)
     assert responseJson.contains(string)
     updatedContent = gson.fromJson(responseJson, Content.class)
 }
