@@ -62,7 +62,10 @@ class ListController {
         service.update(id, trevorismList)
     }
 
+    @Tag(name = "List Operations")
+    @Operation(summary = "Delete a list with id {id} **Secure")
     @Delete(value = "/{id}", produces = MediaType.APPLICATION_JSON)
+    @Secure(value = Roles.USER, allowInternal = true, permissions = Permissions.DELETE)
     TrevorismList delete(long id){
         service.delete(id)
     }
